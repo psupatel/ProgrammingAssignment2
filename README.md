@@ -29,26 +29,26 @@ really a list containing a function to
 
 <!-- -->
 
-makeCacheMatrix <- function(x = matrix()) {
-        m <- NULL
+        makeCacheMatrix <- function(x = matrix()) {
+                m <- NULL
         
-        ## set the value of the matrix
-        set <- function(y) {
-                x <<- y
-                m <<- NULL
+                ## set the value of the matrix
+                set <- function(y) {
+                        x <<- y
+                        m <<- NULL
+                }
+            
+                ## get the value of the matrix
+                get <- function() x
+            
+                ## set the value of the inverse
+                setinverse <- function(solve) m <<- solve
+            
+                ## get the value of the inverse
+                getinverse <- function() m
+                list(set = set, get = get,setinverse = setinverse,
+                        getinverse = getinverse)
         }
-            
-        ## get the value of the matrix
-        get <- function() x
-            
-        ## set the value of the inverse
-        setinverse <- function(solve) m <<- solve
-            
-        ## get the value of the inverse
-        getinverse <- function() m
-        list(set = set, get = get,setinverse = setinverse,
-                getinverse = getinverse)
-}
 
 
 The following function calculates the mean of the special "vector"
@@ -58,24 +58,24 @@ cache and skips the computation. Otherwise, it calculates the mean of
 the data and sets the value of the mean in the cache via the `setmean`
 function.
 
-cachesolve <- function(x, ...) {
-        m <- x$getinverse()
+        cachesolve <- function(x, ...) {
+                m <- x$getinverse()
         
-        ## check to see if the inverse has been calculated
-        ## if so, get cached data
+                ## check to see if the inverse has been calculated
+                ## if so, get cached data
         
-        if(!is.null(m)) {
-              message("getting cached data")
-              return(m)
+                if(!is.null(m)) {
+                        message("getting cached data")
+                return(m)
+                }
+        
+                ## calculcate the inverse of the matrix
+        
+                data <- x$get()
+                m <- solve(data, ...)
+                x$setinverse(m)
+                m
         }
-        
-        ## calculcate the inverse of the matrix
-        
-        data <- x$get()
-        m <- solve(data, ...)
-        x$setinverse(m)
-        m
- }
 
 
 ### Assignment: Caching the Inverse of a Matrix
